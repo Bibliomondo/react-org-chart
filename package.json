@@ -1,8 +1,8 @@
 {
-  "name": "@latticehr/react-org-chart",
+  "name": "@bibliomondo/react-org-chart",
   "version": "0.1.1",
   "description": "Simple, high-performance react component for d3 org chart",
-  "repository": "https://github.com/latticehr/react-org-chart.git",
+  "repository": "https://github.com/Bibliomondo/react-org-chart.git",
   "main": "dist/index.js",
   "directories": {
     "example": "src/examples"
@@ -26,14 +26,15 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
+    "d3": "^3",
     "faker": "^4.1.0",
     "glob": "^7.1.2",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.10",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "rimraf": "^2.6.2",
-    "webpack": "^4.0.1",
-    "webpack-cli": "^2.0.10",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.1.0"
   },
   "peerDependencies": {
