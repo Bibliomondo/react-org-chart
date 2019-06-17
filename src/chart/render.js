@@ -30,7 +30,8 @@ function render(config) {
     lineDepthY,
     treeData,
     sourceNode,
-    onPersonLinkClick
+    onPersonLinkClick,
+    renderFn,
   } = config
 
   // Compute the new tree layout.
@@ -86,95 +87,102 @@ function render(config) {
     .style('cursor', helpers.getCursorForNode)
     .attr('class', 'box')
 
-  const namePos = {
-    x: nodePaddingX * 1.4 + avatarWidth,
-    y: nodePaddingY * 1.8
-  }
+  if(renderFn && typeof renderFn === "function") {
+    nodeEnter.append('foreignObject')
+        .attr('width', nodeWidth)
+        .attr('height', nodeHeight)
+        .insert(d => renderFn(d));
+  } else {
+    const namePos = {
+      x: nodePaddingX * 1.4 + avatarWidth,
+      y: nodePaddingY * 1.8
+    }
 
-  // Person's Name
-  nodeEnter
-    .append('text')
-    .attr('class', PERSON_NAME_CLASS)
-    .attr('x', namePos.x)
-    .attr('y', namePos.y)
-    .attr('dy', '.3em')
-    .style('cursor', 'pointer')
-    .style('fill', nameColor)
-    .style('font-size', 16)
-    .text(d => d.person.name)
+    // Person's Name
+    nodeEnter
+      .append('text')
+      .attr('class', PERSON_NAME_CLASS)
+      .attr('x', namePos.x)
+      .attr('y', namePos.y)
+      .attr('dy', '.3em')
+      .style('cursor', 'pointer')
+      .style('fill', nameColor)
+      .style('font-size', 16)
+      .text(d => d.person.name)
 
-  // Person's Title
-  nodeEnter
-    .append('text')
-    .attr('class', PERSON_TITLE_CLASS + ' unedited')
-    .attr('x', namePos.x)
-    .attr('y', namePos.y + nodePaddingY * 1.2)
-    .attr('dy', '0.1em')
-    .style('font-size', 14)
-    .style('cursor', 'pointer')
-    .style('fill', titleColor)
-    .text(d => d.person.title)
+    // Person's Title
+    nodeEnter
+      .append('text')
+      .attr('class', PERSON_TITLE_CLASS + ' unedited')
+      .attr('x', namePos.x)
+      .attr('y', namePos.y + nodePaddingY * 1.2)
+      .attr('dy', '0.1em')
+      .style('font-size', 14)
+      .style('cursor', 'pointer')
+      .style('fill', titleColor)
+      .text(d => d.person.title)
 
-  const heightForTitle = 45 // getHeightForText(d.person.title)
+    const heightForTitle = 45 // getHeightForText(d.person.title)
 
-  // Person's Reports
-  nodeEnter
-    .append('text')
-    .attr('class', PERSON_REPORTS_CLASS)
-    .attr('x', namePos.x)
-    .attr('y', namePos.y + nodePaddingY + heightForTitle)
-    .attr('dy', '.9em')
-    .style('font-size', 14)
-    .style('font-weight', 500)
-    .style('cursor', 'pointer')
-    .style('fill', reportsColor)
-    .text(helpers.getTextForTitle)
+    // Person's Reports
+    nodeEnter
+      .append('text')
+      .attr('class', PERSON_REPORTS_CLASS)
+      .attr('x', namePos.x)
+      .attr('y', namePos.y + nodePaddingY + heightForTitle)
+      .attr('dy', '.9em')
+      .style('font-size', 14)
+      .style('font-weight', 500)
+      .style('cursor', 'pointer')
+      .style('fill', reportsColor)
+      .text(helpers.getTextForTitle)
 
-  // Person's Avatar
-  nodeEnter
-    .append('image')
-    .attr('width', avatarWidth)
-    .attr('height', avatarWidth)
-    .attr('x', nodePaddingX)
-    .attr('y', nodePaddingY)
-    .attr('stroke', borderColor)
-    .attr('src', d => d.person.avatar)
-    .attr('xlink:href', d => d.person.avatar)
-    .attr('clip-path', 'url(#avatarClip)')
+    // Person's Avatar
+    nodeEnter
+      .append('image')
+      .attr('width', avatarWidth)
+      .attr('height', avatarWidth)
+      .attr('x', nodePaddingX)
+      .attr('y', nodePaddingY)
+      .attr('stroke', borderColor)
+      .attr('src', d => d.person.avatar)
+      .attr('xlink:href', d => d.person.avatar)
+      .attr('clip-path', 'url(#avatarClip)')
 
-  // Person's Department
-  nodeEnter
-    .append('text')
-    .attr('class', getDepartmentClass)
-    .attr('x', 34)
-    .attr('y', avatarWidth + nodePaddingY * 1.2)
-    .attr('dy', '.9em')
-    .style('cursor', 'pointer')
-    .style('fill', titleColor)
-    .style('font-weight', 600)
-    .style('font-size', 8)
-    .attr('text-anchor', 'middle')
-    .text(helpers.getTextForDepartment)
+    // Person's Department
+    nodeEnter
+      .append('text')
+      .attr('class', getDepartmentClass)
+      .attr('x', 34)
+      .attr('y', avatarWidth + nodePaddingY * 1.2)
+      .attr('dy', '.9em')
+      .style('cursor', 'pointer')
+      .style('fill', titleColor)
+      .style('font-weight', 600)
+      .style('font-size', 8)
+      .attr('text-anchor', 'middle')
+      .text(helpers.getTextForDepartment)
 
-  // Person's Link
-  const nodeLink = nodeEnter
-    .append('a')
-    .attr('class', PERSON_LINK_CLASS)
-    .attr('xlink:href', d => d.person.link || '#')
-    .attr('display', d => d.person.link ? "inline" : "none")
-    .on('click', datum => {
-      d3.event.stopPropagation()
-      // TODO: fire link click handler
-      if (onPersonLinkClick) {
-        onPersonLinkClick(datum, d3.event)
-      }
+    // Person's Link
+    const nodeLink = nodeEnter
+      .append('a')
+      .attr('class', PERSON_LINK_CLASS)
+      .attr('xlink:href', d => d.person.link || '#')
+      .attr('display', d => d.person.link ? "inline" : "none")
+      .on('click', datum => {
+        d3.event.stopPropagation()
+        // TODO: fire link click handler
+        if (onPersonLinkClick) {
+          onPersonLinkClick(datum, d3.event)
+        }
+      })
+
+    iconLink({
+      svg: nodeLink,
+      x: nodeWidth - 28,
+      y: nodeHeight - 28
     })
-
-  iconLink({
-    svg: nodeLink,
-    x: nodeWidth - 28,
-    y: nodeHeight - 28
-  })
+  }
 
   // Transition nodes to their new position.
   const nodeUpdate = node

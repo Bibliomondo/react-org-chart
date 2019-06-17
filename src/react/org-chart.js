@@ -1,4 +1,5 @@
 const { createElement, PureComponent } = require('react')
+const { render } = require('react-dom')
 const { init } = require('../chart')
 
 class OrgChart extends PureComponent {
@@ -14,10 +15,16 @@ class OrgChart extends PureComponent {
     id: 'react-org-chart'
   }
 
-  componentDidMount() {
-    const { id, tree, ...options } = this.props
+  renderFn(d) {
+    const div = document.createElement('div');
+    render(this.props.renderFn(d), div);
+    return div;
+  }
 
-    init({ id: `#${id}`, data: tree, ...options })
+  componentDidMount() {
+    const { id, tree, renderFn, ...options } = this.props
+
+    init({ id: `#${id}`, data: tree, renderFn: renderFn ? this.renderFn.bind(this) : undefined, ...options })
   }
 }
 
