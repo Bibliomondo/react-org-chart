@@ -15,7 +15,7 @@ const props = {
       department: '',
       name: 'Imelda Haley',
       title: 'CEO',
-      totalReports: 5
+      totalReports: tree.children.length
     },
     hasChild: true,
     children: []
