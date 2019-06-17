@@ -1,12 +1,29 @@
 const d3 = require('d3')
 const { collapse } = require('../utils')
 
-module.exports = onClick
+module.exports = {
+  onMouseUp,
+  onMouseDown,
+};
 
-function onClick(config = {}) {
+let latestClick = {};
+
+function onMouseDown() {
+  latestClick = {
+    x: d3.event.pageX,
+    y: d3.event.pageY,
+  }
+}
+
+function onMouseUp(config = {}) {
   const { treeData, loadChildren, render, onPersonClick } = config
 
   return datum => {
+
+    if(d3.event.pageX !== latestClick.x || d3.event.pageY !== latestClick.y) {
+      return;
+    }
+
     if (onPersonClick) {
       const result = onPersonClick(datum, d3.event)
 

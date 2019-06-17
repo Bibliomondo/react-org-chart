@@ -1,6 +1,6 @@
 {
   "name": "@bibliomondo/react-org-chart",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Simple, high-performance react component for d3 org chart",
   "repository": "https://github.com/Bibliomondo/react-org-chart.git",
   "main": "dist/index.js",

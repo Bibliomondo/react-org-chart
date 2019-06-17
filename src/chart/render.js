@@ -57,7 +57,8 @@ function render(config) {
     .insert('g')
     .attr('class', CHART_NODE_CLASS)
     .attr('transform', `translate(${parentNode.x0}, ${parentNode.y0})`)
-    .on('click', onClick(config))
+    .on('mousedown', onClick.onMouseDown)
+    .on('mouseup', onClick.onMouseUp(config))
 
   // Person Card Shadow
   nodeEnter
