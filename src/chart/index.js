@@ -96,7 +96,15 @@ function init(options) {
   treeData.y0 = elemHeight / 2
 
   // Collapse all of the children on initial load
-  treeData.children.forEach(collapse)
+  const collapseFiltered = function(node) {
+    if(!options.initiallyExpanded || options.initiallyExpanded.indexOf(node.id) === -1) {
+      collapse(node);
+    }
+    if(node.children) {
+      node.children.forEach(collapseFiltered);
+    }
+  };
+  treeData.children.forEach(collapseFiltered)
 
   // Connect core variables to config so that they can be
   // used in internal rendering functions
