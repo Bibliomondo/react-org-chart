@@ -91,7 +91,7 @@ function render(config) {
     nodeEnter.append('foreignObject')
         .attr('width', nodeWidth)
         .attr('height', nodeHeight)
-        .insert(d => renderFn(d));
+        .insert(d => renderFn(d, 'enter'));
   } else {
     const namePos = {
       x: nodePaddingX * 1.4 + avatarWidth,
@@ -189,6 +189,7 @@ function render(config) {
     .transition()
     .duration(animationDuration)
     .attr('transform', d => `translate(${d.x},${d.y})`)
+    .each("end", d => renderFn && typeof renderFn === "function" && renderFn(d, 'update'))
 
   nodeUpdate
     .select('rect.box')
@@ -201,6 +202,7 @@ function render(config) {
     .transition()
     .duration(animationDuration)
     .attr('transform', d => `translate(${parentNode.x},${parentNode.y})`)
+    .each("end", d => renderFn && typeof renderFn === "function" && renderFn(d, 'exit'))
     .remove()
 
   // Update the links
