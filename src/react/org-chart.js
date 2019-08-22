@@ -25,7 +25,7 @@ class OrgChart extends PureComponent {
 
   static defaultProps = {
     id: 'react-org-chart'
-  }
+  };
 
   renderFn(d, action) {
     if(action === "enter") {
@@ -33,7 +33,7 @@ class OrgChart extends PureComponent {
       const portal = createPortal(this.props.renderFn(d), div);
       this.setState((state) => ({ portals: Object.assign({}, state.portals, { [d.id]: portal }) }));
       return div;
-    } if(action === "update") {
+    } if(action === "update" && this.state.portals[d.id]) {
       const div = this.state.portals[d.id].containerInfo;
       const portal = createPortal(this.props.renderFn(d), div);
       this.setState((state) => ({ portals: Object.assign({}, state.portals, { [d.id]: portal }) }));
@@ -51,6 +51,20 @@ class OrgChart extends PureComponent {
 
     init({ id: `#${id}`, data: tree, renderFn: renderFn ? this.renderFn.bind(this) : undefined, ...options })
   }
+
+  componentDidUpdate(oldProps) {
+    if(oldProps.tree !== this.props.tree) {
+      const updateContent = (d) => {
+        if(d.id) {
+          this.renderFn(d, 'update');
+        }
+        if(d.children) {
+          d.children.forEach(updateContent);
+        }
+      };
+      updateContent(this.props.tree);
+    }
+  }
 }
 
-module.exports = OrgChart
+module.exports = OrgChart;
