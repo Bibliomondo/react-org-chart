@@ -33,7 +33,7 @@ class OrgChart extends PureComponent {
       const portal = createPortal(this.props.renderFn(d), div);
       this.setState((state) => ({ portals: Object.assign({}, state.portals, { [d.id]: portal }) }));
       return div;
-    } if(action === "update" && this.state.portals[d.id]) {
+    } else if(action === "update" && this.state.portals[d.id]) {
       const div = this.state.portals[d.id].containerInfo;
       const portal = createPortal(this.props.renderFn(d), div);
       this.setState((state) => ({ portals: Object.assign({}, state.portals, { [d.id]: portal }) }));
@@ -49,11 +49,11 @@ class OrgChart extends PureComponent {
   componentDidMount() {
     const { id, tree, renderFn, ...options } = this.props
 
-    init({ id: `#${id}`, data: tree, renderFn: renderFn ? this.renderFn.bind(this) : undefined, ...options })
+    this._orgChart = init({ id: `#${id}`, data: tree, renderFn: renderFn ? this.renderFn.bind(this) : undefined, ...options })
   }
 
   componentDidUpdate(oldProps) {
-    if(oldProps.tree !== this.props.tree) {
+    if(oldProps.tree !== this.props.tree && this.props.renderFn) {
       const updateContent = (d) => {
         if(d.id) {
           this.renderFn(d, 'update');
@@ -63,6 +63,20 @@ class OrgChart extends PureComponent {
         }
       };
       updateContent(this.props.tree);
+    }
+  }
+
+  addZoom(zoom, duration) {
+    if(this._orgChart) {
+      this._orgChart.zoom.scale(this._orgChart.zoom.scale() + zoom);
+      this._orgChart.zoom.event(this._orgChart.svgroot.transition(duration || 400));
+    }
+  }
+
+  setZoom(zoom, duration) {
+    if(this._orgChart) {
+      this._orgChart.zoom.scale(zoom);
+      this._orgChart.zoom.event(this._orgChart.svgroot.transition(duration || 400));
     }
   }
 }

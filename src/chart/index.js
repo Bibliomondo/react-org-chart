@@ -150,4 +150,10 @@ function init(options) {
 
   // Update DOM root height
   d3.select(id).style('height', elemHeight + margin.top + margin.bottom)
+
+  return {
+    svgroot,
+    config,
+    zoom,
+  };
 }
