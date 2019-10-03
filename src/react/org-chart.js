@@ -79,6 +79,12 @@ class OrgChart extends PureComponent {
       this._orgChart.zoom.event(this._orgChart.svgroot.transition(duration || 400));
     }
   }
+
+  resize() {
+    if(this._orgChart) {
+      this._orgChart.resize();
+    }
+  }
 }
 
 module.exports = OrgChart;

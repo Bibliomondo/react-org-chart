@@ -155,5 +155,6 @@ function init(options) {
     svgroot,
     config,
     zoom,
+    resize,
   };
 }
