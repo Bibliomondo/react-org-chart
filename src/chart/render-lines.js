@@ -9,6 +9,8 @@ function renderLines(config = {}) {
     margin,
     nodeWidth,
     nodeHeight,
+    lineColor,
+    lineOpacity,
     borderColor,
     sourceNode,
     treeData,
@@ -42,8 +44,8 @@ function renderLines(config = {}) {
       .insert('path', 'g')
       .attr('class', 'link')
       .attr('fill', 'none')
-      .attr('stroke', borderColor)
-      .attr('stroke-opacity', 0.5)
+      .attr('stroke', lineColor || borderColor)
+      .attr('stroke-opacity', lineOpacity || 0.5)
       .attr('stroke-width', 1.25)
       .attr('d', d => {
         const linePoints = [

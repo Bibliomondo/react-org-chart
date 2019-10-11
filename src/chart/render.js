@@ -26,6 +26,7 @@ function render(config) {
     titleColor,
     reportsColor,
     borderColor,
+    borderOpacity,
     avatarWidth,
     lineDepthY,
     treeData,
@@ -71,7 +72,7 @@ function render(config) {
     .attr('rx', nodeBorderRadius)
     .attr('ry', nodeBorderRadius)
     .attr('fill-opacity', 0.05)
-    .attr('stroke-opacity', 0.025)
+    .attr('stroke-opacity', borderOpacity || 0.025)
     .attr('filter', 'url(#boxShadow)')
 
   // Person Card Container
