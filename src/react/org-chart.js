@@ -7,6 +7,9 @@ class OrgChart extends PureComponent {
   constructor(props) {
     super(props);
 
+    this._added = [];
+    this._removed = [];
+
     this.state = {
       portals: {},
     };
@@ -29,21 +32,31 @@ class OrgChart extends PureComponent {
 
   renderFn(d, action) {
     if(action === "enter") {
-      const div = document.createElement('div');
+      const div = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
       const portal = createPortal(this.props.renderFn(d), div);
-      this.setState((state) => ({ portals: Object.assign({}, state.portals, { [d.id]: portal }) }));
+      this._added.push({ [d.id]: portal });
+      this.updatePortals();
       return div;
     } else if(action === "update" && this.state.portals[d.id]) {
       const div = this.state.portals[d.id].containerInfo;
       const portal = createPortal(this.props.renderFn(d), div);
-      this.setState((state) => ({ portals: Object.assign({}, state.portals, { [d.id]: portal }) }));
+      this._added.push({ [d.id]: portal });
+      this.updatePortals();
     } else if (action === "exit") {
-      this.setState((state) => {
-        const portals = Object.assign({}, state.portals);
-        delete portals[d.id];
-        return { portals };
-      });
+      this._removed.push(d.id);
+      this.updatePortals();
     }
+  }
+
+  updatePortals() {
+    clearTimeout(this._timeout);
+    this._timeout = setTimeout(() => {
+      const portals = this._added.reduce((portals, portal) => Object.assign(portals, portal), Object.assign({}, this.state.portals));
+      this._removed.forEach(portal => delete portals[portal]);
+      this.setState({ portals });
+      this._added = [];
+      this._removed = [];
+    }, 200);
   }
 
   componentDidMount() {

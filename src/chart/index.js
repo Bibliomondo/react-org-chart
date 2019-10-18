@@ -67,7 +67,7 @@ function init(options) {
   // Add svg root for d3
   const svgroot = d3
     .select(id)
-    .append('svg')
+    .append('svg:svg')
     .attr('width', elemWidth)
     .attr('height', elemHeight)
 
