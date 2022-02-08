@@ -8,6 +8,7 @@ const nodeSpacing = 12
 const nodePaddingX = 16
 const nodePaddingY = 16
 const avatarWidth = 40
+const treeVerticalPosition = 20
 const nodeBorderRadius = 4
 const margin = {
   top: 20,
@@ -44,7 +45,8 @@ const config = {
   nameColor,
   titleColor,
   reportsColor,
-  shouldResize
+  shouldResize,
+  treeVerticalPosition
 }
 
 module.exports = config

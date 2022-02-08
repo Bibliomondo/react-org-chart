@@ -31,7 +31,8 @@ function init(options) {
     nodeWidth,
     nodeHeight,
     nodeSpacing,
-    shouldResize
+    shouldResize,
+    treeVerticalPosition,
   } = config
 
   // Calculate how many pixel nodes to be spaced based on the
@@ -81,7 +82,7 @@ function init(options) {
           childrenWidth + (elemWidth - childrenWidth * 2) / 2 - margin.left / 2
         ) +
         ',' +
-        20 +
+        treeVerticalPosition +
         ')'
     )
 
@@ -128,7 +129,7 @@ function init(options) {
     parseInt(
       childrenWidth + (elemWidth - childrenWidth * 2) / 2 - margin.left / 2
     ),
-    20
+    treeVerticalPosition
   ])
 
   // Add listener for when the browser or parent node resizes
